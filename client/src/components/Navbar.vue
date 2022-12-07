@@ -10,42 +10,47 @@ export default {
   },
   components: {},
   methods: {
+    initFbSdk() {
+      return new Promise((resolve) => {
+        window.fbAsyncInit = function () {
+          window.FB.init({
+            appId: "717039646224402",
+            cookie: true,
+            xfbml: true,
+            version: "v15.0",
+          });
+
+          // FB.AppEvents.logPageView();
+          resolve();
+        };
+      });
+    },
+
+    getFbSdk() {
+      return new Promise(async (resolve) => {
+        if (window.FB) {
+          console.log("if");
+          resolve(window.FB);
+        } else {
+          console.log("else");
+          const init = await this.initFbSdk();
+          console.log("iniit", init);
+          resolve(window.FB);
+        }
+      });
+    },
+
     statusChangeCallback(response) {
       console.log("statusChangeCallback");
       console.log(response);
-      // The response object is returned with a status field that lets the
-      // app know the current login status of the person.
-      // Full docs on the response object can be found in the documentation
-      // for FB.getLoginStatus().
       if (response.status === "connected") {
-        // Logged into your app and Facebook.
         console.log("responsenya yey", response);
-        // testAPI();
       } else {
-        // The person is not logged into your app or we are unable to tell.
-        // document.getElementById("status").innerHTML =
-        //   "Please log " + "into this app.";
         console.log("Please log in");
       }
     },
 
     checkLoginStatus() {
-      function initFbSdk() {
-        return new Promise((resolve) => {
-          window.fbAsyncInit = function () {
-            window.FB.init({
-              appId: "717039646224402",
-              cookie: true,
-              xfbml: true,
-              version: "v15.0",
-            });
-
-            // FB.AppEvents.logPageView();
-            resolve();
-          };
-        });
-      }
-
       (function (d, s, id) {
         var js,
           fjs = d.getElementsByTagName(s)[0];
@@ -58,21 +63,7 @@ export default {
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
 
-      function getFbSdk() {
-        return new Promise(async (resolve) => {
-          if (window.FB) {
-            console.log("if");
-            resolve(window.FB);
-          } else {
-            console.log("else");
-            const init = await initFbSdk();
-            console.log("iniit", init);
-            resolve(window.FB);
-          }
-        });
-      }
-
-      getFbSdk()
+      this.getFbSdk()
         .then((res) => {
           console.log("res", res);
           this.responseFb = res;
@@ -84,6 +75,7 @@ export default {
               var accessToken = response.authResponse.accessToken;
               console.log("uid", uid);
               console.log("acces", accessToken);
+              this.$router.push('/home')
             } else if (response.status === "not_authorized") {
               console.log("you are logged in fb, continue with it?");
               console.log("response auth", response);
