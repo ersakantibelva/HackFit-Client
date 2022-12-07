@@ -1,6 +1,132 @@
-<script></script>
+<script>
+import { mapActions } from "pinia";
+import { useGlobalStore } from "@/stores/global.js";
+
+export default {
+  data() {
+    return {
+      responseFb: {},
+    };
+  },
+  components: {},
+  methods: {
+    statusChangeCallback(response) {
+      console.log("statusChangeCallback");
+      console.log(response);
+      // The response object is returned with a status field that lets the
+      // app know the current login status of the person.
+      // Full docs on the response object can be found in the documentation
+      // for FB.getLoginStatus().
+      if (response.status === "connected") {
+        // Logged into your app and Facebook.
+        console.log("responsenya yey", response);
+        // testAPI();
+      } else {
+        // The person is not logged into your app or we are unable to tell.
+        // document.getElementById("status").innerHTML =
+        //   "Please log " + "into this app.";
+        console.log("Please log in");
+      }
+    },
+
+    checkLoginStatus() {
+      function initFbSdk() {
+        return new Promise((resolve) => {
+          window.fbAsyncInit = function () {
+            window.FB.init({
+              appId: "717039646224402",
+              cookie: true,
+              xfbml: true,
+              version: "v15.0",
+            });
+
+            // FB.AppEvents.logPageView();
+            resolve();
+          };
+        });
+      }
+
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+
+      function getFbSdk() {
+        return new Promise(async (resolve) => {
+          if (window.FB) {
+            console.log("if");
+            resolve(window.FB);
+          } else {
+            console.log("else");
+            const init = await initFbSdk();
+            console.log("iniit", init);
+            resolve(window.FB);
+          }
+        });
+      }
+
+      getFbSdk()
+        .then((res) => {
+          console.log("res", res);
+          this.responseFb = res;
+          this.responseFb.getLoginStatus((response) => {
+            if (response.status === "connected") {
+              console.log("connecteeed");
+              console.log("responsenya", response);
+              var uid = response.authResponse.userID;
+              var accessToken = response.authResponse.accessToken;
+              console.log("uid", uid);
+              console.log("acces", accessToken);
+            } else if (response.status === "not_authorized") {
+              console.log("you are logged in fb, continue with it?");
+              console.log("response auth", response);
+            } else {
+              console.log("elsenya");
+            }
+          });
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+
+      // res.login(function (response) {
+      //   if (response.authResponse) {
+      //     console.log("Welcome!  Fetching your information.... ");
+      //     FB.api("/me", function (response) {
+      //       console.log(response);
+      //       console.log("Good to see you, " + response.name + ".");
+      //     });
+      //   } else {
+      //     console.log("User cancelled login or did not fully authorize.");
+      //   }
+      // });
+    },
+
+    handleLogin() {
+      console.log("masuk handle login");
+      if (this.responseFb.getLoginStatus) {
+        this.responseFb.getLoginStatus(function (response) {
+          console.log("responseeee", response);
+          this.statusChangeCallback(response);
+        });
+      }
+    },
+  },
+  created() {
+    console.log("mulai 3");
+  },
+};
+</script>
 
 <template>
+  <div class="flex mx-auto"></div>
   <!-- Navbar -->
   <div class="sticky top-0 bg-white z-20">
     <header aria-label="Site Header" class="container mx-auto">
@@ -45,6 +171,13 @@
                 </li>
               </ul>
             </nav>
+
+            <fb:login-button
+              scope="public_profile,email"
+              :onlogin="this.checkLoginStatus()"
+              @click.prevent="handleLogin"
+            >
+            </fb:login-button>
 
             <div class="flex items-center gap-4">
               <div class="sm:flex sm:gap-4">

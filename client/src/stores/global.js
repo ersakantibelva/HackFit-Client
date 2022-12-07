@@ -8,6 +8,12 @@ export const useGlobalStore = defineStore('global', {
     
   },
   actions: {
-    
+    handleLoginFb() {
+
+    },
+
+    handleLogoutFb() {
+      
+    }
   },
 })

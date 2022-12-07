@@ -45,7 +45,7 @@
         </svg>
         Upload
       </button>
-      <img src="./ERD-iProject-HackFit.jpg" width="1000" alt="" class="my-2" />
+      <img src="" width="1000" alt="" class="my-2" />
 
       <button
         type="button"

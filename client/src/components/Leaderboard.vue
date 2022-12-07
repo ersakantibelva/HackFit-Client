@@ -23,7 +23,7 @@
               <a href="#" class="relative block">
                 <img
                   alt="profil"
-                  src="/images/person/6.jpg"
+                  src=""
                   class="mx-auto object-cover rounded-full h-10 w-10"
                 />
               </a>
@@ -44,7 +44,7 @@
               <a href="#" class="relative block">
                 <img
                   alt="profil"
-                  src="/images/person/6.jpg"
+                  src=""
                   class="mx-auto object-cover rounded-full h-10 w-10"
                 />
               </a>
@@ -65,7 +65,7 @@
               <a href="#" class="relative block">
                 <img
                   alt="profil"
-                  src="/images/person/6.jpg"
+                  src=""
                   class="mx-auto object-cover rounded-full h-10 w-10"
                 />
               </a>

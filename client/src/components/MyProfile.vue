@@ -7,7 +7,7 @@
       <a href="#" class="relative block">
         <img
           alt="profil"
-          src="./assets/profile-pic.webp"
+          src=""
           class="mx-auto object-cover rounded-full h-40 w-40"
         />
       </a>
